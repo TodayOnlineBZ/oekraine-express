@@ -14,106 +14,130 @@ import stapMensen from '../assets/fotos/stap-mensen.jpg';
 import breed from '../assets/fotos/breed.jpg';
 
 const [uitgelicht, ...overige] = ritten;
-const routeD = 'M0 100 Q 83 40 166 100 T 333 100 T 500 100 T 666 100 T 833 100 T 1000 100';
+
+const quote = 'Wij geloven dat ieder mens recht heeft op veiligheid. Daarom brengen we hulp naar de grens, en mensen naar een veilige plek.';
+const accent = new Set(['veiligheid.', 'plek.']);
+const quoteWords = quote.split(' ').map((t) => ({ t, hl: accent.has(t) }));
+
+const heroWords = ['Samen', 'brengen', 'we', 'hulp', 'op', 'weg.'];
+
 const stappen = [
-  { n: 1, foto: stapGeld, alt: 'Vrijwilligers kopen hulpgoederen in bij een groothandel', titel: 'We zamelen geld in.',
+  { foto: stapGeld, alt: 'Vrijwilligers kopen hulpgoederen in bij een groothandel', titel: 'We zamelen geld in.',
     tekst: 'Elke rit begint bij donaties, via social media en het netwerk van onze vrijwilligers. Daarmee kopen we in wat op dat moment het hardst nodig is.' },
-  { n: 2, foto: stapBus, alt: 'Een bus vol dozen met hulpgoederen, klaar voor vertrek', titel: 'We brengen hulp op weg.',
+  { foto: stapBus, alt: 'Een bus vol dozen met hulpgoederen, klaar voor vertrek', titel: 'We brengen hulp op weg.',
     tekst: 'Vrijwilligers rijden de volgeladen bus naar de grens. In het Poolse Medyka dragen ze de hulpgoederen over, waarna ze Oekraïne in gaan.' },
-  { n: 3, foto: stapMensen, alt: 'Groepsfoto van bewoners en begeleiders voor opvanglocatie The Phoenix', titel: 'We helpen mensen verder.',
+  { foto: stapMensen, alt: 'Groepsfoto van bewoners en begeleiders voor opvanglocatie The Phoenix', titel: 'We helpen mensen verder.',
     tekst: 'Op de terugweg rijden vluchtelingen mee vanuit opvanglocaties bij de grens naar een veilige plek. Ook steunen we The Phoenix, een opvang in West-Oekraïne.',
     link: { href: site.links.phoenix, label: 'Over The Phoenix' } },
 ];
+const nr = (i: number) => String(i + 1).padStart(2, '0');
 ---
 <Base>
 <span id="top"></span>
 
 <!-- HERO -->
 <section class="hero" aria-labelledby="hero-titel">
+  <div class="hero-ring" aria-hidden="true">
+    <svg viewBox="0 0 200 200" style="transform-origin: 50% 50%"><g style="fill: none; stroke: currentColor; stroke-width: .5"><circle cx="100" cy="100" r="40"></circle><circle cx="100" cy="100" r="62" style="stroke-dasharray: 1.5 4"></circle><circle cx="100" cy="100" r="84"></circle><path d="M100 2V14M100 186V198M2 100H14M186 100H198M31 31L39 39M161 161L169 169M169 31L161 39M39 161L31 169"></path></g></svg>
+  </div>
   <div class="wrap hero-grid">
     <div class="hero-intro">
-      <span class="eyebrow">{site.name}</span>
-      <h1 class="h1" id="hero-titel"><span class="line">Samen brengen we</span> <span class="line"><span class="mark">hulp</span> op weg.</span></h1>
-      <p class="lead hero-sub">Met de energie van studenten en vrijwilligers zetten we ons in voor mensen uit Oekraïne. Help mee met een donatie of steek zelf de handen uit de mouwen.</p>
+      <span class="kicker"><i aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7h11v9H3z"></path><path d="M14 10h4l3 3v3h-7"></path><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg></i>{site.name} · door studenten, voor Oekraïne</span>
+      <h1 class="h1" id="hero-titel">
+        {heroWords.map((w, i) => (
+          <>
+            <span class="w"><span style={`--d: ${(0.15 + i * 0.09).toFixed(2)}s`} class={w === 'hulp' ? 'hl' : undefined}>{w}{w === 'hulp' && <svg class="swoosh" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M4 14 C 50 4, 120 4, 196 10"></path></svg>}</span></span>{' '}
+          </>
+        ))}
+      </h1>
+      <p class="hero-sub">Met de energie van studenten en vrijwilligers zetten we ons in voor mensen uit Oekraïne. Help mee met een donatie of steek zelf de handen uit de mouwen.</p>
       <div class="hero-ctas">
-        <button type="button" class="btn btn-sun" data-donate-open>Doneer nu <Arrow /></button>
-        <a class="btn btn-line" href="#help-mee">Word vrijwilliger</a>
+        <button type="button" class="btn btn-sun" data-mag data-donate-open>Doneer nu <Arrow /></button>
+        <a class="btn btn-ghost" data-mag href="#help-mee">Word vrijwilliger</a>
       </div>
-      <p class="hero-meta"><span class="dot" aria-hidden="true"></span>{site.tagline} · sinds 2022</p>
+      <p class="trust"><span>ANBI-erkend</span><span>Bestuur werkt onbezoldigd</span><span>Ritten sinds maart 2022</span></p>
     </div>
-    <div class="hero-art">
-      <div class="hero-blob" aria-hidden="true"></div>
-      <svg class="route-deco" viewBox="0 0 300 160" aria-hidden="true"><path d="M4 150 C 60 150, 70 40, 150 60 S 240 10, 296 30"></path></svg>
-      <div class="hero-photo">
+    <div class="visual">
+      <div class="v-sun" aria-hidden="true">
+        <div class="disc"></div>
+        <svg viewBox="0 0 100 100" style="transform-origin: 50% 50%"><path style="fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round" d="M84 50L96 50M79.4 67L89.8 73M67 79.4L73 89.8M50 84L50 96M33 79.4L27 89.8M20.6 67L10.2 73M16 50L4 50M20.6 33L10.2 27M33 20.6L27 10.2M50 16L50 4M67 20.6L73 10.2M79.4 33L89.8 27"></path></svg>
+      </div>
+      <div class="v-arch" data-par="-0.06">
         <Image src={hero} data-hero-img alt="Drie lachende vrijwilligers met koffie in de bus, onderweg op een hulprit"
-          widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 560px" loading="eager" fetchpriority="high" />
+          widths={[480, 800, 1200]} sizes="(max-width: 900px) 80vw, 460px" loading="eager" fetchpriority="high" />
       </div>
-      <div class="sun sun-hero" aria-hidden="true">
-        <div class="sun-dot"></div>
-        <svg viewBox="0 0 100 100" class="spin-slow" style="transform-origin: 50% 50%"><path class="spin" d="M84 50L96 50M79.4 67L89.8 73M67 79.4L73 89.8M50 84L50 96M33 79.4L27 89.8M20.6 67L10.2 73M16 50L4 50M20.6 33L10.2 27M33 20.6L27 10.2M50 16L50 4M67 20.6L73 10.2M79.4 33L89.8 27"></path></svg>
+      <div class="v-round" data-par="0.05">
+        <Image src={missieBus} alt="Vrijwilliger in rode jas spreidt vrolijk de armen naast de busjes" widths={[240, 420]} sizes="210px" loading="eager" />
       </div>
-      <div class="tag" aria-hidden="true"><span class="tag-ic"><svg class="ico" viewBox="0 0 24 24"><path d="M3 7h11v9H3z"></path><path d="M14 10h4l3 3v3h-7"></path><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg></span>Groningen → Pools-Oekraïense grens</div>
+      <div class="v-chip">
+        <span class="c-ic" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M12 21s-7-5.4-7-11a7 7 0 0 1 14 0c0 5.6-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+        <span><b>Rit {uitgelicht.nummer}</b><small>{uitgelicht.meta}</small></span>
+      </div>
+    </div>
+  </div>
+  <div class="route" aria-label="Route van een rit: van Nederland naar Medyka en Przemyśl">
+    <div class="wrap route-row">
+      <div class="stop"><b>Nederland</b><small>Inladen en vertrekken</small></div>
+      <div class="track" aria-hidden="true"><span class="fill"></span><span class="pin"></span><span class="van"><svg viewBox="0 0 46 30"><rect class="van-body" x="1" y="3" width="42" height="19" rx="6"></rect><rect class="van-win" x="30" y="7" width="9" height="7" rx="2"></rect><circle class="van-wheel" cx="11" cy="23" r="4.5"></circle><circle class="van-wheel" cx="33" cy="23" r="4.5"></circle></svg></span></div>
+      <div class="stop"><b>Medyka</b><small>Hulpgoederen overdragen</small></div>
+      <div class="track" aria-hidden="true"><span class="fill"></span><span class="pin"></span></div>
+      <div class="stop"><b>Przemyśl</b><small>Mensen veilig mee terug</small></div>
     </div>
   </div>
 </section>
 
 <!-- MISSIE -->
-<section class="sec" id="missie" aria-labelledby="missie-titel">
-  <div class="wrap missie-grid">
-    <div class="missie-text">
-      <span class="eyebrow" data-reveal="1">Onze missie</span>
-      <h2 class="h2" id="missie-titel" data-reveal="2">Kleine acties. Samen veel betekenen.</h2>
-      <p class="lead" data-reveal="3">{site.name} is opgericht door studenten uit Groningen. Na een eerste proefrit in maart 2022 sloten steeds meer vrienden en bekenden aan. Sindsdien rijden vrijwilligers bijna wekelijks naar de Pools-Oekraïense grens.</p>
-      <p data-reveal="3">We geloven dat ieder mens recht heeft op veiligheid. Daarom brengen we hulpgoederen naar de grens en rijden we op de terugweg mensen naar een veilige plek. Het bestuur werkt onbezoldigd; elke rit draait op vrijwilligers die tijd, energie en hun netwerk inzetten.</p>
-      <span class="brandline" data-reveal="4"><i aria-hidden="true"></i>{site.tagline}</span>
-      <ul class="facts" data-reveal="4" aria-label="Kort over de stichting">
-        <li>Opgericht in Groningen</li>
-        <li>Ritten sinds maart 2022</li>
-        <li>Meer dan 200 actieve vrijwilligers</li>
-      </ul>
-    </div>
-    <div class="missie-photos" data-reveal="2">
-      <span class="ring" aria-hidden="true"></span>
-      <div class="mp-a"><Image src={missieGroep} alt="Zes vrijwilligers poseren samen in een loods vol hulpgoederen" widths={[600, 1000, 1400]} sizes="(max-width: 1060px) 92vw, 620px" /></div>
-      <div class="mp-b"><Image src={missieBus} alt="Vrijwilliger in rode jas spreidt vrolijk de armen naast de busjes" widths={[300, 600]} sizes="(max-width: 640px) 55vw, 300px" /></div>
+<section class="sec light-focus" id="missie" aria-labelledby="missie-titel">
+  <div class="wrap">
+    <span class="label" data-reveal="1"><b>01</b>Onze missie</span>
+    <p class="quote" data-fill>{quoteWords.map((w) => <span class={w.hl ? 'fw q-hl' : 'fw'}>{w.t} </span>)}</p>
+    <div class="missie-grid">
+      <div class="missie-text">
+        <h2 id="missie-titel" data-reveal="1">Kleine acties. Samen veel betekenen.</h2>
+        <p data-reveal="2">{site.name} is opgericht door studenten uit Groningen. Na een eerste proefrit in maart 2022 sloten steeds meer vrienden en bekenden aan. Sindsdien rijden vrijwilligers bijna wekelijks naar de Pools-Oekraïense grens.</p>
+        <p data-reveal="2">Het bestuur werkt onbezoldigd. Elke rit draait op vrijwilligers die tijd, energie en hun netwerk inzetten.</p>
+        <ul class="facts" data-reveal="3" aria-label="Kort over de stichting">
+          <li><b>2022</b><small>Opgericht in Groningen</small></li>
+          <li><b>3 dagen</b><small>Duur van één rit</small></li>
+          <li><b>200+</b><small>Actieve vrijwilligers</small></li>
+        </ul>
+      </div>
+      <div class="duo">
+        <div class="duo-a" data-reveal-img="1"><Image src={missieGroep} data-par="0.06" alt="Zes vrijwilligers poseren samen in een loods vol hulpgoederen" widths={[600, 1000, 1400]} sizes="(max-width: 1080px) 70vw, 520px" /></div>
+        <div class="duo-b" data-par="-0.05"><Image src={missieBus} alt="Vrijwilliger in rode jas naast de busjes" widths={[300, 600]} sizes="(max-width: 640px) 45vw, 310px" /></div>
+        <div class="duo-dot" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><path id="lx-circ" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0"></path></defs><text><textPath href="#lx-circ">door studenten · voor oekraïne · </textPath></text></svg></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ZO HELPEN WE -->
-<section class="sec help-sec" id="zo-helpen-we" aria-labelledby="help-titel" data-route>
+<section class="sec steps-sec light-focus" id="zo-helpen-we" aria-labelledby="help-titel">
   <div class="wrap">
-    <div class="help-head">
-      <div style="display: flex; flex-direction: column; gap: 16px">
-        <span class="eyebrow" data-reveal="1">Zo helpen we</span>
-        <h2 class="h2" id="help-titel" data-reveal="2">Van donatie tot<br>veilige plek.</h2>
+    <div class="steps-head">
+      <div>
+        <span class="label" data-reveal="1"><b>02</b>Zo helpen we</span>
+        <h2 class="h2" id="help-titel" data-reveal="2">Van donatie<br>tot veilige plek.</h2>
       </div>
-      <p class="lead" data-reveal="3">Een rit duurt drie dagen. Daarvoor is van alles nodig: geld, goederen, chauffeurs en tolken. Zo komt het samen.</p>
+      <p data-reveal="3">Een rit duurt drie dagen. Daarvoor is van alles nodig: geld, goederen, chauffeurs en tolken. Zo komt het samen.</p>
     </div>
-    <div class="steps">
-      <div class="steps-line" aria-hidden="true">
-        <svg viewBox="0 0 1000 200" preserveAspectRatio="none">
-          <path class="rl-base" d={routeD}></path>
-          <path class="rl-prog" data-route-progress pathLength="1" d={routeD}></path>
-          <path data-route-path d={routeD} style="fill: none; stroke: none"></path>
-        </svg>
-        <div class="bus" data-bus>
-          <svg viewBox="0 0 52 34"><rect class="bus-body" x="2" y="4" width="46" height="22" rx="7"></rect><rect class="bus-win" x="34" y="8" width="10" height="8" rx="2"></rect><circle class="bus-wheel" cx="13" cy="27" r="5"></circle><circle class="bus-wheel" cx="37" cy="27" r="5"></circle></svg>
+    <div class="story">
+      <div class="stick" aria-hidden="true">
+        <div class="sframe">
+          {stappen.map((s, i) => (
+            <div class={i === 0 ? 'simg on' : 'simg'} data-simg={i}><Image src={s.foto} alt="" widths={[500, 800, 1100]} sizes="(max-width: 900px) 1px, 560px" /></div>
+          ))}
         </div>
+        <div class="sprog"><span class="scount">{stappen.map((_, i) => <span class={i === 0 ? 'on' : undefined} data-sc={i}>{nr(i)}</span>)}</span><span class="sbar"><i data-sbar></i></span><span>{nr(stappen.length - 1)}</span></div>
       </div>
-      <span class="vline" aria-hidden="true"><span class="vdot" data-vdot></span></span>
-      <ol class="steps-grid" style="list-style: none; margin: 0; padding: 0">
-        {stappen.map((s) => (
-          <li class="step" data-reveal={String(s.n)}>
-            <div class="step-img">
-              <Image src={s.foto} alt={s.alt} widths={[200, 400]} sizes="200px" />
-              <span class="step-num" aria-hidden="true">{s.n}</span>
-            </div>
-            <div class="step-body">
-              <h3>{s.titel}</h3>
-              <p>{s.tekst}</p>
-              {s.link && <a class="tlink" href={s.link.href}><span>{s.link.label}</span><Arrow /></a>}
-            </div>
+      <ol class="stps" data-stps>
+        {stappen.map((s, i) => (
+          <li class={i === 0 ? 'stp on' : 'stp'} data-stp={i}>
+            <div class="stp-img"><Image src={s.foto} alt={s.alt} widths={[400, 800]} sizes="92vw" /></div>
+            <span class="stp-n" aria-hidden="true">{nr(i)}</span>
+            <h3>{s.titel}</h3>
+            <p>{s.tekst}</p>
+            {s.link && <a class="tlink" href={s.link.href}><span>{s.link.label}</span><Arrow /></a>}
           </li>
         ))}
       </ol>
@@ -122,13 +146,11 @@ const stappen = [
 </section>
 
 <!-- FOTOMOMENT -->
-<section class="moment" aria-labelledby="moment-titel">
-  <div class="wrap">
-    <div class="moment-frame" data-zoom data-reveal="1">
-      <div class="mf-img" style="width: 100%; height: 100%; overflow: hidden">
-        <Image src={breed} alt="Een team vrijwilligers staat lachend naast hun busjes op een zonnige parkeerplaats" widths={[640, 1000, 1600]} sizes="(max-width: 1280px) 96vw, 1180px" />
-      </div>
-      <div class="moment-card">
+<section class="wide" aria-labelledby="moment-titel">
+  <div class="wide-frame" data-wide>
+    <Image src={breed} alt="Een team vrijwilligers staat lachend naast hun busjes op een zonnige parkeerplaats" widths={[800, 1280, 1920, 2560]} sizes="100vw" />
+    <div class="wide-copy">
+      <div class="wrap">
         <h2 id="moment-titel">Hulp krijgt een gezicht.</h2>
         <p>Achter elke rit staan mensen die tijd vrijmaken om samen onderweg te zijn.</p>
       </div>
@@ -137,34 +159,32 @@ const stappen = [
 </section>
 
 <!-- RITTEN -->
-<section class="sec" id="ritten" aria-labelledby="ritten-titel">
+<section class="sec light-focus" id="ritten" aria-labelledby="ritten-titel">
   <div class="wrap">
     <div class="rit-head">
       <div>
-        <span class="eyebrow" data-reveal="1">Onze ritten</span>
+        <span class="label" data-reveal="1"><b>03</b>Onze ritten</span>
         <h2 class="h2" id="ritten-titel" data-reveal="2">Verhalen van onderweg.</h2>
       </div>
-      <a class="tlink" href={site.links.ritten} data-reveal="3"><span>Alle ritten</span><Arrow /></a>
+      <a class="btn btn-line" data-mag href={site.links.ritten} data-reveal="3">Alle ritten <Arrow /></a>
     </div>
     <div class="rit-grid">
-      <a class="rit rit-feat" href={uitgelicht.href} data-reveal="1">
-        <div class="rit-img"><Image src={uitgelicht.foto} alt={uitgelicht.alt} widths={[600, 900, 1300]} sizes="(max-width: 900px) 92vw, 700px" /></div>
+      <a class="rit rit-feat" href={uitgelicht.href}>
+        <div class="rit-img" data-reveal-img="1"><span class="rit-badge">Rit {uitgelicht.nummer}</span><Image src={uitgelicht.foto} alt={uitgelicht.alt} widths={[600, 900, 1300]} sizes="(max-width: 900px) 92vw, 680px" /><span class="rit-go" aria-hidden="true"><Arrow /></span></div>
         <div class="rit-body">
-          <span class="rit-meta"><span class="rit-badge">Rit {uitgelicht.nummer}</span>{uitgelicht.meta}</span>
+          <span class="rit-meta">{uitgelicht.meta}</span>
           <h3>{uitgelicht.titel}</h3>
           <p>{uitgelicht.intro}</p>
-          <span class="go">Bekijk de rit <Arrow /></span>
         </div>
       </a>
       <div class="rit-side">
         {overige.map((r, i) => (
           <a class="rit rit-small" href={r.href} data-reveal={String(i + 2)}>
-            <div class="rit-img"><Image src={r.foto} alt={r.alt} widths={[400, 800]} sizes="(max-width: 640px) 92vw, 260px" /></div>
+            <div class="rit-img"><span class="rit-badge">Rit {r.nummer}</span><Image src={r.foto} alt={r.alt} widths={[400, 800]} sizes="(max-width: 640px) 92vw, 280px" /><span class="rit-go" aria-hidden="true"><Arrow /></span></div>
             <div class="rit-body">
-              <span class="rit-meta"><span class="rit-badge">Rit {r.nummer}</span>{r.meta}</span>
+              <span class="rit-meta">{r.meta}</span>
               <h3>{r.titel}</h3>
               <p>{r.intro}</p>
-              <span class="go">Bekijk de rit <Arrow /></span>
             </div>
           </a>
         ))}
@@ -175,36 +195,36 @@ const stappen = [
 
 <!-- HELP MEE -->
 <section class="sec cta dark" id="help-mee" aria-labelledby="cta-titel">
-  <div class="cta-shape" aria-hidden="true">
-    <svg viewBox="0 0 200 200" class="spin-slower" style="transform-origin: 50% 50%"><g class="spin"><circle cx="100" cy="100" r="44"></circle><circle cx="100" cy="100" r="64" style="stroke-dasharray: 2 6"></circle><path d="M100 4V24M100 176V196M4 100H24M176 100H196M32 32L46 46M154 154L168 168M168 32L154 46M46 154L32 168M63 11L71 30M137 170L129 189M11 137L30 129M189 63L170 71M137 11L129 30M63 189L71 170M11 63L30 71M189 137L170 129"></path></g></svg>
+  <div class="cta-ring" aria-hidden="true">
+    <svg viewBox="0 0 200 200" style="transform-origin: 50% 50%"><g style="fill: none; stroke: currentColor; stroke-width: .5"><circle cx="100" cy="100" r="46"></circle><circle cx="100" cy="100" r="70" style="stroke-dasharray: 1.5 4"></circle><path d="M100 4V22M100 178V196M4 100H22M178 100H196M32 32L45 45M155 155L168 168M168 32L155 45M45 155L32 168M63 11L70 28M137 172L130 189M11 137L28 130M189 63L172 70M137 11L130 28M63 189L70 172M11 63L28 70M189 137L172 130"></path></g></svg>
   </div>
   <div class="wrap">
     <div class="cta-head">
-      <span class="eyebrow" data-reveal="1">Help mee</span>
-      <h2 class="h2" id="cta-titel" data-reveal="2">Jouw energie maakt het verschil.</h2>
-      <p class="lead" data-reveal="3">Iedere rit is mogelijk dankzij mensen die geven of meerijden. Kies wat bij jou past.</p>
+      <span class="label" data-reveal="1"><b>04</b>Help mee</span>
+      <h2 class="h2" id="cta-titel" data-reveal="2">Jouw energie maakt <span class="hl">het verschil.</span></h2>
+      <p data-reveal="3">Iedere rit is mogelijk dankzij mensen die geven of meerijden. Kies wat bij jou past.</p>
     </div>
     <div class="cta-grid">
-      <div class="route-card rc-donate" data-reveal="2">
-        <span class="rc-ic" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg></span>
+      <div class="card card-donate" data-reveal="1">
+        <span class="c-ic" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg></span>
         <h3>Doneer</h3>
         <p>Met jouw donatie kopen we hulpgoederen in en maken we ritten naar de grens mogelijk. Elk bedrag helpt.</p>
-        <div class="rc-actions">
-          <button type="button" class="btn btn-ink" data-donate-open>Doneer nu <Arrow /></button>
-          <span class="rc-note">Veilig via bunq</span>
+        <div class="c-actions">
+          <button type="button" class="btn btn-ink" data-mag data-donate-open>Doneer nu <Arrow /></button>
+          <span class="c-note">Veilig via bunq</span>
         </div>
       </div>
-      <div class="route-card rc-vol" data-reveal="3">
-        <span class="rc-ic" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7"></path><path d="M18 14.3c2 .8 3.2 2.9 3.5 5.7"></path></svg></span>
+      <div class="card card-vol" data-reveal="2">
+        <span class="c-ic" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7"></path><path d="M18 14.3c2 .8 3.2 2.9 3.5 5.7"></path></svg></span>
         <h3>Word vrijwilliger</h3>
         <p>Rij mee als chauffeur of help als tolk. Je hebt een rijbewijs en een geldig paspoort nodig; wij zorgen voor de bus en de contacten.</p>
-        <div class="rc-actions">
-          <a class="btn btn-sun" href={site.volunteerForm} target="_blank" rel="noopener">Ik help mee <Arrow /></a>
+        <div class="c-actions">
+          <a class="btn btn-sun" data-mag href={site.volunteerForm} target="_blank" rel="noopener">Ik help mee <Arrow /></a>
           <a class="tlink" href={site.links.vrijwilliger}><span>Meer informatie</span></a>
         </div>
       </div>
     </div>
-    {site.anbi && <p class="anbi" data-reveal="4"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>{site.name} is door de Belastingdienst aangemerkt als ANBI.</p>}
+    {site.anbi && <p class="anbi" data-reveal="3"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>{site.name} is door de Belastingdienst aangemerkt als ANBI.</p>}
   </div>
 </section>
 </Base>
