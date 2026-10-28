@@ -266,7 +266,7 @@ a{color:#153D73}a:hover{color:#0D2A52}
 /* Footer */
 .ftr{padding-block:clamp(80px,8cqi,120px) 32px}
 .ftr-big{font-family:"Manrope Variable",Manrope,sans-serif;font-weight:800;font-size:clamp(40px,6.4cqi,96px);line-height:.95;letter-spacing:-.05em;color:var(--ink);margin-bottom:clamp(48px,6cqi,88px)}
-.ftr-big span{color:transparent;-webkit-text-stroke:1.5px var(--ink)}
+.ftr-big span{color:#0059B8}
 .ftr-grid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:40px;padding-top:40px;border-top:1px solid var(--line)}
 .ftr-brand{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
 .ftr-brand img{height:56px;width:auto}
