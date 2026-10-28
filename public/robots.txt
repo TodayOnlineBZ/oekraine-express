@@ -1,0 +1,3 @@
+# Testomgeving – niet indexeren. Vervang bij livegang door: User-agent: * / Allow: /
+User-agent: *
+Disallow: /
